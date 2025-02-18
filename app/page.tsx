@@ -2,6 +2,7 @@
 import Navbar from "./components/Navbar";
 import { useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
+import ExpenseList from "./components/ExpenseList";
 
 export default function Home() {
   const closeForm = ()=>{
@@ -19,6 +20,7 @@ export default function Home() {
         >
           Add Expense
         </button>
+        <ExpenseList />
         {form && 
         <ExpenseForm closeForm={closeForm} />
         }

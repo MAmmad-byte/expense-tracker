@@ -7,6 +7,7 @@ import { RxCross2 } from "react-icons/rx";
 import z from "zod"
 
 export const schema = z.object({
+  id: z.number().optional(),
     title: z.string().min(3).max(55),
     category: z.string(),
     expense:z.coerce.number().min(1),
@@ -18,7 +19,7 @@ interface Props{
 }
 export type FormData = z.infer<typeof schema>;
 const ExpenseForm = ({closeForm}:Props) => {
-    const { register, handleSubmit, watch, formState: { errors } } = useForm({resolver: zodResolver(schema)});
+    const { register, handleSubmit, formState: { errors } } = useForm({resolver: zodResolver(schema)});
     const onSubmit: SubmitHandler<FormData> = (formData)=>{
       console.log(formData)
       axios.post("http://localhost:3000/api/expense", formData)

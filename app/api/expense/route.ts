@@ -12,7 +12,6 @@ const schema = z.object({
 export async function POST(request: NextRequest){
 
     const body =  await request.json();
-    
     const validate = schema.safeParse(body)
     if(!validate.success){
         return NextResponse.json(validate.error.format(), {status:400})
@@ -24,6 +23,12 @@ export async function POST(request: NextRequest){
         expense:validate.data.expense,
         description:validate.data.description 
     }})
+
+    return NextResponse.json(expense)
+}
+export async function GET(){
+
+    const expense = await prisma.expense.findMany();
 
     return NextResponse.json(expense)
 }
