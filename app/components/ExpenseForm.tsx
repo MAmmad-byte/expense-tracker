@@ -1,7 +1,7 @@
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
 import z from "zod"
@@ -16,17 +16,31 @@ export const schema = z.object({
 
 interface Props{
     closeForm: ()=>void
+    setExpense: (expenseLish:FormData[])=>void
+    expenses: FormData[]
 }
 export type FormData = z.infer<typeof schema>;
-const ExpenseForm = ({closeForm}:Props) => {
+const ExpenseForm = ({closeForm, setExpense, expenses}:Props) => {
     const { register, handleSubmit, formState: { errors } } = useForm({resolver: zodResolver(schema)});
-    const onSubmit: SubmitHandler<FormData> = (formData)=>{
+    const [error, setError] = useState("")
+    const onSubmit: SubmitHandler<FormData> = async(formData)=>{
       console.log(formData)
-      axios.post("/api/expense", formData)
+      const expensess = [...expenses]
+      setExpense([formData, ...expenses])
+      try {
+        const res = await axios.post("/api/expense", formData)
+        setExpense([res.data, ...expensess])
+        closeForm()
+      } catch (error) {
+        setExpense([...expensess])
+        setError("Error! Failed to add Expense")
+      }
+
     }
   return (
     <div className="bg-transparent backdrop-blur-sm w-full h-screen absolute top-0 left-0 flex justify-center items-center">
       <form onSubmit={handleSubmit(onSubmit)} className="w-1/2 mx-auto bg-blue-950 p-4  rounded-md text-left">
+      <p className="text-red-600">{error}</p>
       <div className="flex items-center justify-between mb-5">
         <h2 className="text-xl">Enter Expense</h2>
         <RxCross2 size={25} onClick={closeForm} cursor={"pointer"} />

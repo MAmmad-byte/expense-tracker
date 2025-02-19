@@ -3,14 +3,18 @@ import ExpenseListItem from "./ExpenseListItem";
 import axios from "axios";
 import { FormData } from "./ExpenseForm";
 
-const ExpenseList = () => {
-    const [expenses, setExpenses] = useState<FormData[]>([])
+interface Props{
+  expenses: FormData[]
+  setExpense:(expenseLish:FormData[])=>void
+}
+
+const ExpenseList = ({expenses, setExpense}:Props) => {  
     async function getExpenses (){
         const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
              'Cache-Control': 'no-cache, no-store, must-revalidate'
         }})
         // console.log(expenses)
-      setExpenses([ ...expenses.data])
+        setExpense([ ...expenses.data])
     }
     useEffect(() => {
         getExpenses()
@@ -23,7 +27,7 @@ const ExpenseList = () => {
       <ul className=" divide-y divide-gray-200 dark:divide-gray-700 mt-4">
         {expenses.length > 0 ? expenses.map(expense=>(
 
-        <ExpenseListItem title={expense.title} category={expense.category} description={expense.description} expense={expense.expense} key={expense.id} />
+        <ExpenseListItem title={expense.title} category={expense.category} description={expense.description} expense={expense.expense} key={expense.id + expense.title} />
         )): "No Expenses Record Found"}
       </ul>
     </div>

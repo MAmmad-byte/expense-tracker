@@ -1,7 +1,7 @@
 "use client"
 import Navbar from "./components/Navbar";
 import { useState } from "react";
-import ExpenseForm from "./components/ExpenseForm";
+import ExpenseForm, { FormData } from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
 
 export default function Home() {
@@ -9,6 +9,7 @@ export default function Home() {
     setForm(false)
   }
   const [form, setForm] = useState(false)
+  const [expenses, setExpenses] = useState<FormData[]>([])
   return (
     <div className="relative">
       <Navbar />
@@ -20,9 +21,9 @@ export default function Home() {
         >
           Add Expense
         </button>
-        <ExpenseList />
+        <ExpenseList setExpense={(expenseList)=>setExpenses([...expenseList])} expenses={expenses} />
         {form && 
-        <ExpenseForm closeForm={closeForm} />
+        <ExpenseForm setExpense={(expenseList)=>setExpenses([...expenseList])} expenses={expenses} closeForm={closeForm} />
         }
       </div>
     </div>
