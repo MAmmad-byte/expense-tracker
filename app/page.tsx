@@ -8,7 +8,7 @@ export default function Home() {
   const closeForm = ()=>{
     setForm(false)
   }
-  const [form, setForm] = useState(true)
+  const [form, setForm] = useState(false)
   return (
     <div className="relative">
       <Navbar />
