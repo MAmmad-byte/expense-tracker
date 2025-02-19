@@ -22,7 +22,7 @@ const ExpenseForm = ({closeForm}:Props) => {
     const { register, handleSubmit, formState: { errors } } = useForm({resolver: zodResolver(schema)});
     const onSubmit: SubmitHandler<FormData> = (formData)=>{
       console.log(formData)
-      axios.post("http://localhost:3000/api/expense", formData)
+      axios.post("/api/expense", formData)
     }
   return (
     <div className="bg-transparent backdrop-blur-sm w-full h-screen absolute top-0 left-0 flex justify-center items-center">

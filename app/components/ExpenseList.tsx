@@ -6,7 +6,7 @@ import { FormData } from "./ExpenseForm";
 const ExpenseList = () => {
     const [expenses, setExpenses] = useState<FormData[]>([])
     async function getExpenses (){
-        const expenses = await axios.get<FormData[]>("http://localhost:3000/api/expense", {headers:{
+        const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
              'Cache-Control': 'no-cache, no-store, must-revalidate'
         }})
         // console.log(expenses)
