@@ -33,6 +33,7 @@ const ExpenseForm = ({closeForm, setExpense, expenses}:Props) => {
         closeForm()
       } catch (error) {
         setExpense([...expensess])
+        console.log(error)
         setError("Error! Failed to add Expense")
       }
 
