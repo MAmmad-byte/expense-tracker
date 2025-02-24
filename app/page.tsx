@@ -3,14 +3,13 @@ import Navbar from "./components/Navbar";
 import { useState } from "react";
 import ExpenseForm, { FormData } from "./components/ExpenseForm";
 import ExpenseList from "./components/ExpenseList";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 
 export default function Home() {
   const closeForm = ()=>{
     setForm(false)
   }
-  // const session = useSession()
-  // console.log(session)
+
   const [form, setForm] = useState(false)
   const [expenses, setExpenses] = useState<FormData[]>([])
   return (

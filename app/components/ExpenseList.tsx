@@ -18,7 +18,7 @@ const ExpenseList = ({expenses, setExpense}:Props) => {
     }
     useEffect(() => {
         getExpenses()
-    }, [])
+    })
     
   return (
     <div className="text-left w-1/2 mx-auto mt-10">

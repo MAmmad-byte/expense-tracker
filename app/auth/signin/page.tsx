@@ -1,5 +1,6 @@
 "use client"
 import { doCredentialsLogin } from "@/app/actions";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
@@ -54,13 +55,18 @@ const Signin = () => {
               required
             />
           </div>
+          <div className="flex items-center justify-between">
+
           <button
             type="submit"
             className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
+            >
             Login
           </button>
+          <Link href="/auth/signup" className=" mx-2 k rounded-md text-sm  hover:text-green-600 ">Sign up now</Link>
+            </div>
         </form>
+        
       </div>
     </div>
   );
