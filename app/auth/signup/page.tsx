@@ -1,11 +1,14 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const Signup = () => {
+  const router = useRouter()
 
   const registerSchema = z.object({
     name: z.string().min(3).max(55),
@@ -21,7 +24,20 @@ const Signup = () => {
     formState: { errors },
   } = useForm({ resolver: zodResolver(registerSchema) });
   const onSubmit: SubmitHandler<registerType> = async (formdata) => {
-    console.log(formdata);
+    try {
+      
+      const res = await axios.post("/api/auth/register", {
+        name:formdata.name,
+        email:formdata.email,
+        password:formdata.password
+      })
+      if(res.statusText){
+        router.push("/")
+      }
+    } catch (error) {
+      // console.log(error)
+    }
+    
   };
   return (
     <div className="container mx-auto flex items-center justify-center w-full h-screen">
