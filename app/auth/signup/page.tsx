@@ -1,4 +1,5 @@
 "use client";
+import { signIn } from "next-auth/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Link from "next/link";
@@ -8,7 +9,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const Signup = () => {
-  const router = useRouter()
+  const router = useRouter();
 
   const registerSchema = z.object({
     name: z.string().min(3).max(55),
@@ -23,22 +24,37 @@ const Signup = () => {
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(registerSchema) });
+
   const onSubmit: SubmitHandler<registerType> = async (formdata) => {
     try {
-      
       const res = await axios.post("/api/auth/register", {
-        name:formdata.name,
-        email:formdata.email,
-        password:formdata.password
-      })
-      if(res.statusText){
-        router.push("/")
+        name: formdata.name,
+        email: formdata.email,
+        password: formdata.password,
+      });
+
+      if (res.status === 200) {
+        // Sign in the user after successful registration
+        const signInRes = await signIn("credentials", {
+          email: formdata.email,
+          password: formdata.password,
+          redirect: false,  // Prevent redirect after sign-in
+        });
+
+        // Check for error in signInRes
+        if (signInRes?.error) {
+          console.log("Error signing in:", signInRes.error);
+          // Optionally handle the error (e.g., show an error message)
+        } else {
+          // Successfully signed in, redirect user
+          router.push("/");
+        }
       }
     } catch (error) {
-      console.log(error)
+      console.log("Registration or sign-in error:", error);
     }
-    
   };
+
   return (
     <div className="container mx-auto flex items-center justify-center w-full h-screen">
       <div className="w-1/2 p-4 border border-blue-950 bg-blue-900 rounded-md shadow-md">
@@ -46,7 +62,7 @@ const Signup = () => {
         <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-5">
             <label
-              htmlFor="email"
+              htmlFor="name"
               className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
             >
               Name
@@ -55,11 +71,12 @@ const Signup = () => {
               type="text"
               {...register("name")}
               className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              placeholder="name@flowbite.com"
+              placeholder="Your name"
               required
             />
             <p>{errors.name?.message}</p>
           </div>
+
           <div className="mb-5">
             <label
               htmlFor="email"
@@ -76,6 +93,7 @@ const Signup = () => {
             />
             <p>{errors.email?.message}</p>
           </div>
+
           <div className="mb-5">
             <label
               htmlFor="password"
@@ -91,16 +109,17 @@ const Signup = () => {
             />
             <p>{errors.password?.message}</p>
           </div>
+
           <div className="flex items-center justify-between">
             <button
               type="submit"
               className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
             >
-              Login
+              Sign up
             </button>
             <Link
               href="/auth/signin"
-              className=" mx-2 k rounded-md text-sm  hover:text-green-600 "
+              className="mx-2 k rounded-md text-sm hover:text-green-600"
             >
               Sign in
             </Link>

@@ -22,11 +22,7 @@ export async function POST(request: NextRequest){
         email: validate.data.email,
         password: hashPassword
     }});
-    await signIn("credentials", {
-        email:response.email,
-        password:validate.data.password
-      })
-    return NextResponse.json(response)
+    return NextResponse.json({email: response.email})
 }
 
      const registerSchema = z.object({
