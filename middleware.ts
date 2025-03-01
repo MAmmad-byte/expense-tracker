@@ -1,17 +1,11 @@
-import { getToken } from "next-auth/jwt";
+import { auth } from "./auth";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-export async function middleware(request: NextRequest) {
-  const token = await getToken({
-    req: request,
-    secret: process.env.AUTH_SECRET,
-  });
-
-  if (!token) {
-    return NextResponse.redirect(new URL("/auth/newPage", request.url));
+export default auth(async function middleware(req) {
+  if (!req.auth) {
+    return NextResponse.redirect(new URL("/auth/signin", req.url));
   }
-}
+})
 
 export const config = {
   matcher: "/",
