@@ -2,7 +2,6 @@ import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import {genSalt, hash} from "bcrypt-ts"
-import { signIn } from "@/auth";
 
 export async function POST(request: NextRequest){
 
