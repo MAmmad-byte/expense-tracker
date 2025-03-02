@@ -6,7 +6,7 @@ import { SignOut } from "./signout";
 const Navbar = () => {
   const session = useSession();
   return (
-    <nav className="p-2 bg-sky-800 ">
+    <nav className="p-2 bg-white shadow-sm ">
       <div className="container mx-auto flex items-center justify-between">
         <h1>
           <span className="text-3xl ">e</span>xpenseTracker
