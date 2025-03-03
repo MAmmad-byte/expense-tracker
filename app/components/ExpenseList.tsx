@@ -8,28 +8,74 @@ interface Props{
   setExpense:(expenseLish:FormData[])=>void
 }
 
-const ExpenseList = ({expenses, setExpense}:Props) => {  
-    async function getExpenses (){
-        const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
-             'Cache-Control': 'no-cache, no-store, must-revalidate'
-        }})
-        // console.log(expenses)
-        setExpense([ ...expenses.data])
-    }
-    useEffect(() => {
-        getExpenses()
-    },[])
+const ExpenseList = (
+  // {expenses, setExpense}:Props
+) => {  
+    // async function getExpenses (){
+    //     const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
+    //          'Cache-Control': 'no-cache, no-store, must-revalidate'
+    //     }})
+    //     // console.log(expenses)
+    //     setExpense([ ...expenses.data])
+    // }
+    // useEffect(() => {
+    //     getExpenses()
+    // },[])
     
   return (
-    <div className="text-left w-1/2 mx-auto mt-10">
-      <h2 className="text-xl font-semibold">Recent Expenses</h2>
+    <div className="text-md font-semibold text-gray-500 mt-5 ">
+      {/* <h2 className="text-xl font-semibold">Recent Expenses</h2>
       <hr className="w-36 h-1  bg-gray-100 border-0 rounded-sm  dark:bg-gray-700"></hr>
       <ul className=" divide-y divide-gray-200 dark:divide-gray-700 mt-4">
         {expenses.length > 0 ? expenses.map(expense=>(
 
         <ExpenseListItem title={expense.title} category={expense.category} description={expense.description} expense={expense.expense} key={expense.id + expense.title} />
         )): "No Expenses Record Found"}
-      </ul>
+      </ul> */}
+
+      <h4>Recent Expenses</h4>
+      <div className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3">
+        <div>
+          <p className="text-sm font-bold text-gray-800">Expense Title fsaf sasafasfklhewklfghh </p>
+          <p className="text-xs text-green-600">Category: Food & Drinks</p>
+        </div>
+        <p className="whitespace-nowrap text-xl text-red-500"> <span className="text-sm">Rs</span> 547/-</p>
+      </div>
+      <div className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3">
+        <div>
+          <p className="text-sm font-bold text-gray-800">Expense Title fsaf sasafasfklhewklfghh </p>
+          <p className="text-xs text-green-600">Category: Food & Drinks</p>
+        </div>
+        <p className="whitespace-nowrap text-xl text-red-500"> <span className="text-sm">Rs</span> 547/-</p>
+      </div>
+      <div className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3">
+        <div>
+          <p className="text-sm font-bold text-gray-800">Expense Title fsaf sasafasfklhewklfghh </p>
+          <p className="text-xs text-green-600">Category: Food & Drinks</p>
+        </div>
+        <p className="whitespace-nowrap text-xl text-red-500"> <span className="text-sm">Rs</span> 547/-</p>
+      </div>
+      <div className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3">
+        <div>
+          <p className="text-sm font-bold text-gray-800">Expense Title fsaf sasafasfklhewklfghh </p>
+          <p className="text-xs text-green-600">Category: Food & Drinks</p>
+        </div>
+        <p className="whitespace-nowrap text-xl text-red-500"> <span className="text-sm">Rs</span> 547/-</p>
+      </div>
+      <div className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3">
+        <div>
+          <p className="text-sm font-bold text-gray-800">Expense Title fsaf sasafasfklhewklfghh </p>
+          <p className="text-xs text-green-600">Category: Food & Drinks</p>
+        </div>
+        <p className="whitespace-nowrap text-xl text-red-500"> <span className="text-sm">Rs</span> 547/-</p>
+      </div>
+      <div className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3">
+        <div>
+          <p className="text-sm font-bold text-gray-800">Expense Title fsaf sasafasfklhewklfghh </p>
+          <p className="text-xs text-green-600">Category: Food & Drinks</p>
+        </div>
+        <p className="whitespace-nowrap text-xl text-red-500"> <span className="text-sm">Rs</span> 547/-</p>
+      </div>
     </div>
   );
 };
