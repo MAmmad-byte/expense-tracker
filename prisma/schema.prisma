@@ -14,11 +14,22 @@ datasource db {
 model Expense {
   id    Int     @id @default(autoincrement())
   title String  
-  category  String
+  // category  String
   expense Int
   description String
   userid Int 
   user User @relation(fields: [userid], references: [id])
+  category_id Int @db.SmallInt() 
+  category ExpenseCategory @relation(fields: [category_id], references: [id])
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime? 
+}
+
+model ExpenseCategory{
+  id    Int    @id @default(autoincrement())
+  title String @db.VarChar(55)
+  expense Expense[]
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   deleted_at DateTime? 

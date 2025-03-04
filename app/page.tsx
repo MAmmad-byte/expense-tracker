@@ -6,16 +6,25 @@ import ExpenseList from "./components/ExpenseList";
 import { SessionProvider } from "next-auth/react";
 import AppChart from "./components/AppChart";
 import Expense from "./components/Expense";
-
+import axios from "axios";
 
 export default function Home() {
   const closeForm = () => {
     setForm(false);
   };
-  
+
   const [form, setForm] = useState(false);
   const [expenses, setExpenses] = useState<FormData[]>([]);
-  
+    async function getExpenses (){
+        const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
+             'Cache-Control': 'no-cache, no-store, must-revalidate'
+        }})
+        // console.log(expenses.data)
+        setExpenses([ ...expenses.data])
+    }
+    useEffect(() => {
+        getExpenses()
+    },[])
   return (
     <SessionProvider>
       <div className="relative">
@@ -38,37 +47,30 @@ export default function Home() {
             </div>
             <div className=" mt-5">
               <div className=" p-10 bg-white shadow-sm rounded-md">
-              {/* <canvas id="line-chart"></canvas> */}
-              <AppChart />
+                {/* <canvas id="line-chart"></canvas> */}
+                <AppChart />
               </div>
-              <div className="flex items-center justify-between mt-5">
-                    <div className="w-full h-80 shadow-sm rounded-md mr-3 bg-white "></div>
-                    <div className="w-full h-80 shadow-sm rounded-md bg-white "></div>
-              </div>
+              {/* <div className="flex items-center justify-between mt-5">
+                <div className="w-full h-80 shadow-sm rounded-md mr-3 bg-white "></div>
+                <div className="w-full h-80 shadow-sm rounded-md bg-white "></div>
+              </div> */}
             </div>
           </div>
-          <div className="w-1/3 bg-white ml-5 min-h-full rounded-md shadow-sm" ><Expense/></div>
+          <div className="w-1/3 bg-white ml-5 max-h-[80vh] rounded-md shadow-sm overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
+            <Expense
+              formClick={() => (form ? setForm(false) : setForm(true))}
+              expenses={expenses}
+              setList={setExpenses}
+            />
+          </div>
         </div>
-        {/* <div className="container mx-auto text-center">
-          <button
-            type="button"
-            onClick={() => (form ? setForm(false) : setForm(true))}
-            className="mx-auto w-1/2 mt-5 text-white bg-transparent hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-transparent border border-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            Add Expense
-          </button>
-          <ExpenseList
+        {form && (
+          <ExpenseForm
             setExpense={(expenseList) => setExpenses([...expenseList])}
             expenses={expenses}
+            closeForm={closeForm}
           />
-          {form && (
-            <ExpenseForm
-              setExpense={(expenseList) => setExpenses([...expenseList])}
-              expenses={expenses}
-              closeForm={closeForm}
-            />
-          )}
-        </div> */}
+        )}
       </div>
     </SessionProvider>
   );
