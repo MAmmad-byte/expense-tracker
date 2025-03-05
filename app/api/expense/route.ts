@@ -16,7 +16,6 @@ export async function POST(request: NextRequest){
     if(!validate.success){
         return NextResponse.json(validate.error.format(), {status:400})
     }
-    // console.log(validate)
     const expense = await prisma.expense.create({
         data:{
             title: validate.data.title,
@@ -26,12 +25,12 @@ export async function POST(request: NextRequest){
             userid:Number(session?.user?.id)
         }
     })
-    // console.log(expense)
     return NextResponse.json(expense)
 }
 export async function GET(){
     const session = await auth();
     const expense = await prisma.expense.findMany({
+        // select:{title},
         where:{userid:Number(session?.user?.id)},
         orderBy:{created_at:"desc"},
         include:{category:{select:{title:true}}}

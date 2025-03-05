@@ -1,8 +1,7 @@
 "use client";
-import prisma from "@/prisma/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
 import z from "zod";
@@ -22,7 +21,7 @@ interface Props {
   expenses: FormData[];
 }
 interface Category {
-  id: Number;
+  id: number;
   title: string;
 }
 
@@ -35,7 +34,6 @@ const ExpenseForm = ({ closeForm, setExpense, expenses }: Props) => {
   } = useForm({ resolver: zodResolver(schema) });
   const [error, setError] = useState("");
   const onSubmit: SubmitHandler<FormData> = async (formData) => {
-    console.log(formData);
     const expensess = [...expenses];
     setExpense([formData, ...expenses]);
     try {
@@ -44,8 +42,7 @@ const ExpenseForm = ({ closeForm, setExpense, expenses }: Props) => {
       closeForm();
     } catch (error) {
       setExpense([...expensess]);
-      console.log(error);
-      setError("Error! Failed to add Expense");
+      setError("Error! Failed to add Expense"+error);
     }
   };
   const [categoryLoading, setCategoryLoading] = useState(true)

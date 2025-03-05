@@ -1,6 +1,3 @@
-import React, { useEffect } from "react";
-import ExpenseListItem from "./ExpenseListItem";
-import axios from "axios";
 import { FormData } from "./ExpenseForm";
 
 interface Props {
@@ -8,10 +5,11 @@ interface Props {
   setExpense: (expenseLish: FormData[]) => void;
 }
 
-const ExpenseList = ({ expenses, setExpense }: Props) => {
+const ExpenseList = ({ expenses }: Props) => {
   return (
     <div className="text-md font-semibold text-gray-500 mt-5 ">
       <h4>Recent Expenses</h4>
+      {expenses.length == 0 ? "No Record Found":null}
       {expenses.map((expense) => (
         <div
           key={expense.id + expense.title}
@@ -20,7 +18,7 @@ const ExpenseList = ({ expenses, setExpense }: Props) => {
           <div>
             <p className="text-sm font-bold text-gray-800">{expense.title} </p>
             <p className="text-xs text-green-600">
-              Category: {expense.category?.title}
+              Category: {(expense.category as any).title }
             </p>
           </div>
           <p className="whitespace-nowrap text-base text-red-500">

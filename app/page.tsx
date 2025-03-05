@@ -2,11 +2,11 @@
 import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 import ExpenseForm, { FormData } from "./components/ExpenseForm";
-import ExpenseList from "./components/ExpenseList";
 import { SessionProvider } from "next-auth/react";
 import AppChart from "./components/AppChart";
 import Expense from "./components/Expense";
 import axios from "axios";
+import ChartSkeleton from "./components/ChartSkeleton";
 
 export default function Home() {
   const closeForm = () => {
@@ -14,16 +14,25 @@ export default function Home() {
   };
 
   const [form, setForm] = useState(false);
+  const [stats, setStats] = useState([]);
+  const [isStat, setIsStat] = useState(false);
+  const [isExpense, setIsExpense] = useState(true);
   const [expenses, setExpenses] = useState<FormData[]>([]);
     async function getExpenses (){
         const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
              'Cache-Control': 'no-cache, no-store, must-revalidate'
         }})
-        // console.log(expenses.data)
         setExpenses([ ...expenses.data])
+        setIsExpense(false)
+    }
+    async function getMonthlyStats (){
+        const expenses = await axios.get("/api/expense/filter/monthlyExpense")
+        setStats(expenses.data)
+        setIsStat(true)
     }
     useEffect(() => {
         getExpenses()
+        getMonthlyStats();
     },[])
   return (
     <SessionProvider>
@@ -46,9 +55,10 @@ export default function Home() {
               </div>
             </div>
             <div className=" mt-5">
-              <div className=" p-10 bg-white shadow-sm rounded-md">
+              <div className=" px-10 py-5 bg-white shadow-sm rounded-md">
                 {/* <canvas id="line-chart"></canvas> */}
-                <AppChart />
+                {!isStat && <ChartSkeleton/>}
+                {isStat && <AppChart stats={stats} />}
               </div>
               {/* <div className="flex items-center justify-between mt-5">
                 <div className="w-full h-80 shadow-sm rounded-md mr-3 bg-white "></div>
@@ -61,6 +71,7 @@ export default function Home() {
               formClick={() => (form ? setForm(false) : setForm(true))}
               expenses={expenses}
               setList={setExpenses}
+              isExpense={isExpense}
             />
           </div>
         </div>

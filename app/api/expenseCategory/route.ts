@@ -1,4 +1,3 @@
-import { auth } from "@/auth";
 import prisma from "@/prisma/client";
 import { NextResponse } from "next/server";
 
@@ -13,6 +12,6 @@ export async function GET(){
         return NextResponse.json(response, {status:200})
         
     } catch (error) {
-        return NextResponse.json("Unable to fetch Categories.", {status:500})   
+        return NextResponse.json("Unable to fetch Categories." + error, {status:500})   
     }
 }
