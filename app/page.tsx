@@ -1,9 +1,12 @@
 "use client";
 import Navbar from "./components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ExpenseForm, { FormData } from "./components/ExpenseForm";
-import ExpenseList from "./components/ExpenseList";
 import { SessionProvider } from "next-auth/react";
+import AppChart from "./components/AppChart";
+import Expense from "./components/Expense";
+import axios from "axios";
+import ChartSkeleton from "./components/ChartSkeleton";
 
 export default function Home() {
   const closeForm = () => {
@@ -11,7 +14,26 @@ export default function Home() {
   };
 
   const [form, setForm] = useState(false);
+  const [stats, setStats] = useState([]);
+  const [isStat, setIsStat] = useState(false);
+  const [isExpense, setIsExpense] = useState(true);
   const [expenses, setExpenses] = useState<FormData[]>([]);
+    async function getExpenses (){
+        const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
+             'Cache-Control': 'no-cache, no-store, must-revalidate'
+        }})
+        setExpenses([ ...expenses.data])
+        setIsExpense(false)
+    }
+    async function getMonthlyStats (){
+        const expenses = await axios.get("/api/expense/filter/monthlyExpense")
+        setStats(expenses.data)
+        setIsStat(true)
+    }
+    useEffect(() => {
+        getExpenses()
+        getMonthlyStats();
+    },[])
   return (
     <SessionProvider>
       <div className="relative">
@@ -19,45 +41,47 @@ export default function Home() {
         <div className="flex w-full p-4 container mx-auto">
           <div className="w-full">
             <div className="flex items-center justify-between">
-              <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-md">
-                <p className="text-xs">Food & Drinks</p>
-                <p className="font-semibold mt-1">Rs 4,568/-</p>
+              <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
+                <p className="text-xs">Total Expense</p>
+                <p className="font-semibold mt-1 text-red-600">Rs 4,568/-</p>
               </div>
-              <div className="w-full mx-4 py-4 px-6 text-gray-600 bg-white rounded-md shadow-md">
-                <p className="text-xs">Food & Drinks</p>
-                <p className="font-semibold mt-1">Rs 4,568/-</p>
+              <div className="w-full mx-3 py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
+                <p className="text-xs">Most Expensive: Food & Drink</p>
+                <p className="font-semibold mt-1 text-blue-600">Rs 4,568/-</p>
               </div>
-              <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-md">
-                <p className="text-xs">Food & Drinks</p>
-                <p className="font-semibold mt-1">Rs 4,568/-</p>
+              <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
+                <p className="text-xs">Save from last month</p>
+                <p className="font-semibold mt-1 text-green-600">Rs 4,568/-</p>
               </div>
             </div>
-            <div>
-              Graph
+            <div className=" mt-5">
+              <div className=" px-10 py-5 bg-white shadow-sm rounded-md">
+                {/* <canvas id="line-chart"></canvas> */}
+                {!isStat && <ChartSkeleton/>}
+                {isStat && <AppChart stats={stats} />}
+              </div>
+              {/* <div className="flex items-center justify-between mt-5">
+                <div className="w-full h-80 shadow-sm rounded-md mr-3 bg-white "></div>
+                <div className="w-full h-80 shadow-sm rounded-md bg-white "></div>
+              </div> */}
             </div>
           </div>
-          <div className="w-80" >Expense List</div>
+          <div className="w-1/3 bg-white ml-5 max-h-[80vh] rounded-md shadow-sm overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
+            <Expense
+              formClick={() => (form ? setForm(false) : setForm(true))}
+              expenses={expenses}
+              setList={setExpenses}
+              isExpense={isExpense}
+            />
+          </div>
         </div>
-        {/* <div className="container mx-auto text-center">
-          <button
-            type="button"
-            onClick={() => (form ? setForm(false) : setForm(true))}
-            className="mx-auto w-1/2 mt-5 text-white bg-transparent hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-transparent border border-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-          >
-            Add Expense
-          </button>
-          <ExpenseList
+        {form && (
+          <ExpenseForm
             setExpense={(expenseList) => setExpenses([...expenseList])}
             expenses={expenses}
+            closeForm={closeForm}
           />
-          {form && (
-            <ExpenseForm
-              setExpense={(expenseList) => setExpenses([...expenseList])}
-              expenses={expenses}
-              closeForm={closeForm}
-            />
-          )}
-        </div> */}
+        )}
       </div>
     </SessionProvider>
   );

@@ -1,35 +1,31 @@
-import React, { useEffect } from "react";
-import ExpenseListItem from "./ExpenseListItem";
-import axios from "axios";
 import { FormData } from "./ExpenseForm";
 
-interface Props{
-  expenses: FormData[]
-  setExpense:(expenseLish:FormData[])=>void
+interface Props {
+  expenses: FormData[];
+  setExpense: (expenseLish: FormData[]) => void;
 }
 
-const ExpenseList = ({expenses, setExpense}:Props) => {  
-    async function getExpenses (){
-        const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
-             'Cache-Control': 'no-cache, no-store, must-revalidate'
-        }})
-        // console.log(expenses)
-        setExpense([ ...expenses.data])
-    }
-    useEffect(() => {
-        getExpenses()
-    },[])
-    
+const ExpenseList = ({ expenses }: Props) => {
   return (
-    <div className="text-left w-1/2 mx-auto mt-10">
-      <h2 className="text-xl font-semibold">Recent Expenses</h2>
-      <hr className="w-36 h-1  bg-gray-100 border-0 rounded-sm  dark:bg-gray-700"></hr>
-      <ul className=" divide-y divide-gray-200 dark:divide-gray-700 mt-4">
-        {expenses.length > 0 ? expenses.map(expense=>(
-
-        <ExpenseListItem title={expense.title} category={expense.category} description={expense.description} expense={expense.expense} key={expense.id + expense.title} />
-        )): "No Expenses Record Found"}
-      </ul>
+    <div className="text-md font-semibold text-gray-500 mt-5 ">
+      <h4>Recent Expenses</h4>
+      {expenses.length == 0 ? "No Record Found":null}
+      {expenses.map((expense) => (
+        <div
+          key={expense.id + expense.title}
+          className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3"
+        >
+          <div>
+            <p className="text-sm font-bold text-gray-800">{expense.title} </p>
+            <p className="text-xs text-green-600">
+              Category: {(expense.category as any).title }
+            </p>
+          </div>
+          <p className="whitespace-nowrap text-base text-red-500">
+            <span className="text-sm">Rs</span> {expense.expense}/-
+          </p>
+        </div>
+      ))}
     </div>
   );
 };
