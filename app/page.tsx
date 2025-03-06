@@ -2,7 +2,7 @@
 import Navbar from "./components/Navbar";
 import { useEffect, useState } from "react";
 import ExpenseForm, { FormData } from "./components/ExpenseForm";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider, useSession } from "next-auth/react";
 import AppChart from "./components/AppChart";
 import Expense from "./components/Expense";
 import axios from "axios";
@@ -18,6 +18,7 @@ export default function Home() {
   const [isStat, setIsStat] = useState(false);
   const [isExpense, setIsExpense] = useState(true);
   const [expenses, setExpenses] = useState<FormData[]>([]);
+  const session = useSession()
     async function getExpenses (){
         const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
              'Cache-Control': 'no-cache, no-store, must-revalidate'
@@ -37,8 +38,8 @@ export default function Home() {
   return (
     <SessionProvider>
       <div className="relative">
-        <Navbar />
-        <div className="flex w-full p-4 container mx-auto">
+        <Navbar userInfo={session.data?.user} />
+        <div className="flex w-full py-4 container mx-auto">
           <div className="w-full">
             <div className="flex items-center justify-between">
               <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">

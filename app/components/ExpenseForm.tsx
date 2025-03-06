@@ -6,7 +6,10 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { RxCross2 } from "react-icons/rx";
 import z from "zod";
 import Skeleton from "./Skeleton";
+import { Editor } from "primereact/editor";
 
+
+        
 export const schema = z.object({
   id: z.number().optional(),
   title: z.string().min(3).max(55),
@@ -29,11 +32,14 @@ export type FormData = z.infer<typeof schema>;
 const ExpenseForm = ({ closeForm, setExpense, expenses }: Props) => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema) });
   const [error, setError] = useState("");
+  const [des, setDes] = useState("");
   const onSubmit: SubmitHandler<FormData> = async (formData) => {
+    formData.description = des;
     const expensess = [...expenses];
     setExpense([formData, ...expenses]);
     try {
@@ -133,11 +139,13 @@ const ExpenseForm = ({ closeForm, setExpense, expenses }: Props) => {
           >
             Description
           </label>
-          <textarea
+          {/* <textarea
             placeholder="Enter Description"
             {...register("description")}
             className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-          />
+          /> */}
+          {/* <AppEditor {...register("description")} /> */}
+          <Editor value={des} onTextChange={(e) => setDes(`${e.htmlValue}`)}  />
         </div>
         <button
           type="submit"

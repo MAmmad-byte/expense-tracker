@@ -7,7 +7,7 @@ const schema = z.object({
     title: z.string().min(3).max(55),
     category: z.coerce.number().min(1),
     expense:z.coerce.number().min(1),
-    description: z.string().max(5000).optional().default("")
+    description: z.string().optional().default("")
 })
 export async function POST(request: NextRequest){
     const session = await auth();

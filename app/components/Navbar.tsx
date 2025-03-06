@@ -1,10 +1,16 @@
-
-import { useSession } from "next-auth/react";
 import React from "react";
-import { SignOut } from "./signout";
-
-const Navbar = () => {
-  const session = useSession();
+import Profile from "./navbar/Profile";
+import { User } from "next-auth";
+export interface UserSession{
+  name:string
+  email:string 
+  id:number
+  image:string
+}
+interface Props{
+  userInfo?:User
+}
+const Navbar = ({userInfo}:Props) => {
   return (
     <nav className="p-2 bg-white shadow-sm ">
       <div className="container mx-auto flex items-center justify-between">
@@ -13,9 +19,10 @@ const Navbar = () => {
         </h1>
         <div className="flex items-center justify-between">
          
-           <SignOut />
+           {/* <SignOut /> */}
           {/* <p onClick={()=>signOut()} className="p-2 mx-2 bg-black rounded-md text-sm">Logout</p> */}
-          <div className="text-sm">{session && session.data?.user?.name}</div>
+          {/* <div className="text-sm">{session && session.data?.user?.name}</div> */}
+          <Profile userInfo={userInfo} />
         </div>
       </div>
     </nav>
