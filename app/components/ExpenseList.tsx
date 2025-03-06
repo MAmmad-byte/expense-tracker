@@ -3,15 +3,17 @@ import { FormData } from "./ExpenseForm";
 interface Props {
   expenses: FormData[];
   setExpense: (expenseLish: FormData[]) => void;
+  setDetail:(value?:number)=>void
 }
 
-const ExpenseList = ({ expenses }: Props) => {
+const ExpenseList = ({ expenses, setDetail }: Props) => {
   return (
     <div className="text-md font-semibold text-gray-500 mt-5 ">
       <h4>Recent Expenses</h4>
       {expenses.length == 0 ? "No Record Found":null}
       {expenses.map((expense) => (
         <div
+        onClick={()=>setDetail(expense.id)}
           key={expense.id + expense.title}
           className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3"
         >

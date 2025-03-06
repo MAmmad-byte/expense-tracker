@@ -7,6 +7,7 @@ import AppChart from "./components/AppChart";
 import Expense from "./components/Expense";
 import axios from "axios";
 import ChartSkeleton from "./components/ChartSkeleton";
+import ExpenseDetail from "./components/ExpenseDetail";
 
 export default function Home() {
   const closeForm = () => {
@@ -14,32 +15,45 @@ export default function Home() {
   };
 
   const [form, setForm] = useState(false);
+  const [detail, setDetail] = useState(false);
+  const [Expdetail, setExpDetail] = useState({});
   const [stats, setStats] = useState([]);
   const [isStat, setIsStat] = useState(false);
   const [isExpense, setIsExpense] = useState(true);
   const [expenses, setExpenses] = useState<FormData[]>([]);
-  const session = useSession()
-    async function getExpenses (){
-        const expenses = await axios.get<FormData[]>("/api/expense", {headers:{
-             'Cache-Control': 'no-cache, no-store, must-revalidate'
-        }})
-        setExpenses([ ...expenses.data])
-        setIsExpense(false)
+  const session = useSession();
+  async function getExpenses() {
+    const expenses = await axios.get<FormData[]>("/api/expense", {
+      headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+      },
+    });
+    setExpenses([...expenses.data]);
+    setIsExpense(false);
+  }
+  async function getMonthlyStats() {
+    const expenses = await axios.get("/api/expense/filter/monthlyExpense");
+    setStats(expenses.data);
+    setIsStat(true);
+  }
+  useEffect(() => {
+    getExpenses();
+    getMonthlyStats();
+  }, []);
+  const  getExpense = async (value?:number)=>{
+    try {
+      const expenses = await axios.get("/api/expense/"+value);
+    } catch (error) {
+      console.log(error)
+      
     }
-    async function getMonthlyStats (){
-        const expenses = await axios.get("/api/expense/filter/monthlyExpense")
-        setStats(expenses.data)
-        setIsStat(true)
-    }
-    useEffect(() => {
-        getExpenses()
-        getMonthlyStats();
-    },[])
+    setDetail(true)
+  }
   return (
     <SessionProvider>
       <div className="relative">
         <Navbar userInfo={session.data?.user} />
-        <div className="flex w-full py-4 container mx-auto">
+        <div className="flex w-full py-4 container mx-auto max-h-[calc(100vh-4rem)] ">
           <div className="w-full">
             <div className="flex items-center justify-between">
               <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
@@ -56,9 +70,9 @@ export default function Home() {
               </div>
             </div>
             <div className=" mt-5">
-              <div className=" px-10 py-5 bg-white shadow-sm rounded-md">
+              <div className=" px-10 py-2 bg-white shadow-sm rounded-md">
                 {/* <canvas id="line-chart"></canvas> */}
-                {!isStat && <ChartSkeleton/>}
+                {!isStat && <ChartSkeleton />}
                 {isStat && <AppChart stats={stats} />}
               </div>
               {/* <div className="flex items-center justify-between mt-5">
@@ -67,15 +81,17 @@ export default function Home() {
               </div> */}
             </div>
           </div>
-          <div className="w-1/3 bg-white ml-5 max-h-[80vh] rounded-md shadow-sm overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
+          <div className="w-1/3 bg-white ml-5  rounded-md shadow-sm overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
             <Expense
               formClick={() => (form ? setForm(false) : setForm(true))}
               expenses={expenses}
               setList={setExpenses}
               isExpense={isExpense}
+              setDetail={(value)=>getExpense(value)}
             />
           </div>
         </div>
+        {detail && <ExpenseDetail setDetail={()=>setDetail(false)} />}
         {form && (
           <ExpenseForm
             setExpense={(expenseList) => setExpenses([...expenseList])}

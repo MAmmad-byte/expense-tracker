@@ -67,10 +67,10 @@ const ExpenseForm = ({ closeForm, setExpense, expenses }: Props) => {
   }, []);
 
   return (
-    <div className="bg-transparent backdrop-blur-sm backdrop-brightness-50 w-full h-screen absolute top-0 left-0 flex justify-center items-center">
+    <div className=" bg-transparent backdrop-blur-sm backdrop-brightness-50 w-full h-screen overflow-clip absolute top-0 left-0 flex justify-center items-center">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="w-1/2 mx-auto bg-white shadow-md p-4  rounded-md text-left"
+        className="w-1/2 my-10 mx-auto bg-white shadow-md p-4 max-h-screen rounded-md text-left overflow-y-auto"
       >
         <p className="text-red-600">{error}</p>
         <div className="flex items-center justify-between mb-5">
@@ -145,7 +145,7 @@ const ExpenseForm = ({ closeForm, setExpense, expenses }: Props) => {
             className="shadow-xs bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
           /> */}
           {/* <AppEditor {...register("description")} /> */}
-          <Editor value={des} onTextChange={(e) => setDes(`${e.htmlValue}`)}  />
+          <Editor  value={des} onTextChange={(e) => setDes(`${e.htmlValue}`)} />
         </div>
         <button
           type="submit"

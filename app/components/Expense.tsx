@@ -6,8 +6,9 @@ interface Props {
   expenses: FormData[]
   setList:(formdata:FormData[]) =>void
   isExpense:boolean
+  setDetail:(value?:number)=>void
 }
-const Expense = ({ formClick, expenses, setList, isExpense }: Props) => {
+const Expense = ({ formClick, expenses, setList, isExpense, setDetail }: Props) => {
   return (
     <div className="p-5">
       <div className="font-bold text-md ">
@@ -17,7 +18,7 @@ const Expense = ({ formClick, expenses, setList, isExpense }: Props) => {
         </button>
       </div>
       {isExpense?<ExpenseSkeleton />:
-      <ExpenseList expenses={expenses} setExpense={setList} /> 
+      <ExpenseList setDetail={(value)=>setDetail(value)} expenses={expenses} setExpense={setList} /> 
     }
     </div>
   );
