@@ -15,8 +15,8 @@ export default function Home() {
   };
 
   const [form, setForm] = useState(false);
-  const [detail, setDetail] = useState(false);
-  const [Expdetail, setExpDetail] = useState({});
+  const [expenseValue, setExpenseValue] = useState<number|undefined>(undefined);
+  
   const [stats, setStats] = useState([]);
   const [isStat, setIsStat] = useState(false);
   const [isExpense, setIsExpense] = useState(true);
@@ -37,18 +37,10 @@ export default function Home() {
     setIsStat(true);
   }
   useEffect(() => {
-    getExpenses();
+    getExpenses()
     getMonthlyStats();
   }, []);
-  const  getExpense = async (value?:number)=>{
-    try {
-      const expenses = await axios.get("/api/expense/"+value);
-    } catch (error) {
-      console.log(error)
-      
-    }
-    setDetail(true)
-  }
+
   return (
     <SessionProvider>
       <div className="relative">
@@ -87,11 +79,11 @@ export default function Home() {
               expenses={expenses}
               setList={setExpenses}
               isExpense={isExpense}
-              setDetail={(value)=>getExpense(value)}
+              setDetail={(value)=>setExpenseValue(value)}
             />
           </div>
         </div>
-        {detail && <ExpenseDetail setDetail={()=>setDetail(false)} />}
+        {expenseValue && <ExpenseDetail value={expenseValue}  setDetail={()=>setExpenseValue(undefined)} />}
         {form && (
           <ExpenseForm
             setExpense={(expenseList) => setExpenses([...expenseList])}

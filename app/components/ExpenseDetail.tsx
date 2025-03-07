@@ -1,17 +1,71 @@
-import React from "react";
-interface Props{
-    
+import axios from "axios";
+import { useEffect, useState } from "react";
+import ExpenseDetailSkeleton from "./Skeleton/ExpenseDetailSkeleton";
+interface Props {
+  setDetail: () => void;
+  value: number;
 }
-const ExpenseDetail = ({setDetail}:{setDetail:()=>void}) => {
+export interface DetailType {
+  title: string;
+  expense: number;
+  category: { title: string };
+  date: string;
+  description: string | TrustedHTML;
+}
+
+const ExpenseDetail = ({ setDetail, value }: Props) => {
+  const [Expdetail, setExpDetail] = useState<DetailType>();
+  const [loading, setLoading] = useState(true);
+  const getExpense = async (value?: number) => {
+    try {
+      const expenses = await axios.get<DetailType>("/api/expense/" + value);
+      console.log(expenses.data);
+      setExpDetail(expenses.data);
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+    // setDetail(true)
+  };
+  useEffect(() => {
+    getExpense(value);
+  }, []);
+  function createMarkup(c: HTMLElement) {
+    return { __html: c };
+  }
   return (
-    <div onClick={()=>setDetail()} className=" box-border  bg-transparent backdrop-blur-sm backdrop-brightness-50 w-full h-screen overflow-clip absolute top-0 left-0 flex justify-center items-center">
+    <div
+      onClick={() => setDetail()}
+      className=" box-border  bg-transparent backdrop-blur-sm backdrop-brightness-50 w-full h-screen overflow-clip absolute top-0 left-0 flex justify-center items-center"
+    >
       <div className="w-1/2  mx-auto bg-white shadow-md p-4  max-h-screen rounded-md text-left overflow-y-auto">
-        <h3 className="text-lg font-bold">Laptop Purchase</h3>
-        <p className="text-sm font-semibold text-gray-600">Cost Rs 5096/-</p>
-        <p className="text-sm font-semibold text-gray-600">Date 23/25/2025</p>
-        <p className="text-sm font-semibold text-gray-600">Category Income</p>
-        <p className="text-sm font-semibold text-gray-600 mt-2">Description</p>
-        <p className="py-2"></p>
+        {loading ? (
+          <ExpenseDetailSkeleton />
+        ) : (
+          <div>
+            <h3 className="text-lg font-bold">{Expdetail?.title}</h3>
+            <p className="text-sm font-semibold text-gray-600">
+              Cost Rs {Expdetail?.expense}/-
+            </p>
+            <p className="text-sm font-semibold text-gray-600">
+              Date {Expdetail?.date}
+            </p>
+            <p className="text-sm font-semibold text-gray-600">
+              Category {Expdetail?.category.title}
+            </p>
+            {Expdetail!.description && (
+              <>
+                <p className="text-sm font-semibold text-gray-600 mt-2">
+                  Description
+                </p>
+                <p
+                  className="py-2"
+                  dangerouslySetInnerHTML={{ __html: Expdetail!.description }}
+                ></p>
+              </>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

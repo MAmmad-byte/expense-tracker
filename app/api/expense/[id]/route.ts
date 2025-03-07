@@ -4,12 +4,13 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const id = await params
       const session = await auth();
     const expense = await prisma.expense.findFirst({
-      where: { id: Number(params.id) },
+      where: { id: Number(id) },
       include: { category: { select: { title: true } } },
     });
     if (expense) {
