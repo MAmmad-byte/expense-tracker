@@ -1,10 +1,15 @@
-import React, { useEffect } from "react";
-import { Chart, ChartConfiguration } from "chart.js/auto";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
-interface Props{
-  stats:{total?:number, date?:string}[]
+interface Props {
+  stats: { total?: number; date?: string }[];
 }
-const AppChart = ({stats}:Props) => {
+import dynamic from "next/dynamic";
+const ApexChart = dynamic(() => import("react-apexcharts"), { ssr: false });
+const AppChart = ({ stats }: Props) => {
+  const [data, setData] = useState<{ months: string[]; expense: number[] }>({
+    months: [],
+    expense: [],
+  });
 
   useEffect(() => {
     const months = [];
@@ -14,41 +19,37 @@ const AppChart = ({stats}:Props) => {
       expense[i] = 0;
     }
     for (let i = 0; i < stats.length; i++) {
-      expense[i] = Number(stats[i].total); 
+      expense[i] = Number(stats[i].total);
     }
-    console.log(months.reverse());
-    console.log(expense.reverse());
-    const ctx = document.getElementById(
-      "myChart"
-    ) as HTMLCanvasElement | null;
-    if (ctx) {
-      const config: ChartConfiguration = {
-        type: "line",
-        data: {
-          labels: months,
-          datasets: [
-            {
-              label: new Date().getFullYear().toString(),
-              backgroundColor: "rgba(49, 130, 206, 0.5)",
-              borderColor: "#3182ce",
-              borderWidth: 2,
-              data: expense ,
-              fill: true,
-            },
-          ],
-        },
-      };
-      if (
-        (window as any).myLine !== undefined
-        &&
-        (window as any).myLine !== null
-    ){
-      (window as any).myLine.destroy()
-    }
-      (window as any).myLine = new Chart(ctx, config);
-    }
+    expense.reverse();
+    months.reverse();
+    setData({ expense, months });
   }, []);
-  return <canvas id="myChart"></canvas>;
+  const option = {
+    chart: {
+      id: "apexchart-example",
+    },
+    xaxis: {
+      categories: data.months,
+    },
+  };
+
+  const series = [
+    {
+      name: "Total",
+      data: data.expense,
+    },
+  ];
+
+  return (
+    <ApexChart
+      type="line"
+      options={option}
+      series={series}
+      height={"100%"}
+      width={"100%"}
+    />
+  );
 };
 
 export default AppChart;

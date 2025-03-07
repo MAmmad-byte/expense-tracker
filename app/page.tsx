@@ -45,8 +45,8 @@ export default function Home() {
     <SessionProvider>
       <div className="relative">
         <Navbar userInfo={session.data?.user} />
-        <div className="flex w-full py-4 container mx-auto max-h-[calc(100vh-4rem)] ">
-          <div className="w-full">
+        <div className="p-5 lg:p-0 flex w-full flex-col lg:flex-row py-4 container mx-auto md:max-h-[calc(100vh-4rem)] ">
+          <div className="w-full ">
             <div className="flex items-center justify-between">
               <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
                 <p className="text-xs">Total Expense</p>
@@ -62,7 +62,7 @@ export default function Home() {
               </div>
             </div>
             <div className=" mt-5">
-              <div className=" px-10 py-2 bg-white shadow-sm rounded-md">
+              <div className=" px-10 h-[calc(100vh-200px)] py-2 bg-white shadow-sm rounded-md">
                 {/* <canvas id="line-chart"></canvas> */}
                 {!isStat && <ChartSkeleton />}
                 {isStat && <AppChart stats={stats} />}
@@ -73,7 +73,7 @@ export default function Home() {
               </div> */}
             </div>
           </div>
-          <div className="w-1/3 bg-white ml-5  rounded-md shadow-sm overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
+          <div className="md:w-1/3 bg-white md:ml-5 mt-5 lg:mt-0  rounded-md shadow-sm overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 [&::-webkit-scrollbar-thumb]:rounded-full">
             <Expense
               formClick={() => (form ? setForm(false) : setForm(true))}
               expenses={expenses}

@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const id = await params
+        const {id} = await params
       const session = await auth();
     const expense = await prisma.expense.findFirst({
       where: { id: Number(id) },

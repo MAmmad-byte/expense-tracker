@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ExpenseDetailSkeleton from "./Skeleton/ExpenseDetailSkeleton";
+import moment from "moment";
 interface Props {
   setDetail: () => void;
   value: number;
@@ -9,7 +10,7 @@ export interface DetailType {
   title: string;
   expense: number;
   category: { title: string };
-  date: string;
+  created_at: string;
   description: string | TrustedHTML;
 }
 
@@ -30,9 +31,7 @@ const ExpenseDetail = ({ setDetail, value }: Props) => {
   useEffect(() => {
     getExpense(value);
   }, []);
-  function createMarkup(c: HTMLElement) {
-    return { __html: c };
-  }
+
   return (
     <div
       onClick={() => setDetail()}
@@ -48,7 +47,7 @@ const ExpenseDetail = ({ setDetail, value }: Props) => {
               Cost Rs {Expdetail?.expense}/-
             </p>
             <p className="text-sm font-semibold text-gray-600">
-              Date {Expdetail?.date}
+              Date {moment(Expdetail?.created_at).format("DD/MM/YYYY")}
             </p>
             <p className="text-sm font-semibold text-gray-600">
               Category {Expdetail?.category.title}

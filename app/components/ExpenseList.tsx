@@ -15,7 +15,7 @@ const ExpenseList = ({ expenses, setDetail }: Props) => {
         <div
         onClick={()=>setDetail(expense.id)}
           key={expense.id + expense.title}
-          className="px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3"
+          className="cursor-pointer border-2 border-transparent hover:border-gray-200  px-4 py-2 bg-gray-50 shadow-md flex items-center justify-between rounded-md mt-3"
         >
           <div>
             <p className="text-sm font-bold text-gray-800">{expense.title} </p>
