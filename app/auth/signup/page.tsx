@@ -59,7 +59,7 @@ const Signup = () => {
     <div className="bg-gradient-to-r from-rose-50 to-teal-50">
 
       <div className="container mx-auto flex items-center justify-center w-full h-screen">
-        <div className="w-2/5 h-1/2 p-4 border-2 border-gray-200 bg-white rounded-md shadow-lg">
+        <div className="lg:w-2/5 p-4 border-2 border-gray-200 bg-white rounded-md shadow-lg">
           <h1 className="text-2xl font-bold">Expesne Tracker</h1>
           <h2 className="text-base font-bold  mb-5 bg-gradient-to-r from-cyan-700 to-blue-950 bg-clip-text text-transparent">Create your free account</h2>
           <form className="mx-auto" onSubmit={handleSubmit(onSubmit)}>
@@ -116,7 +116,7 @@ const Signup = () => {
             <div className="flex items-center justify-between">
               <button
                 type="submit"
-                className="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="text-white bg-cyan-700 hover:bg-cyan-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm  sm:w-auto px-5 py-2.5 text-center "
               >
                 Sign up
               </button>
