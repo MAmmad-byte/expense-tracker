@@ -45,7 +45,7 @@ export default function Home() {
     <SessionProvider>
       <div className="relative">
         <Navbar userInfo={session.data?.user} />
-        <div className="p-5 lg:p-0 flex w-full flex-col lg:flex-row py-4 container mx-auto md:max-h-[calc(100vh-4rem)] ">
+        <div className="p-5 mt-5 lg:p-0 flex w-full flex-col lg:flex-row py-4 container mx-auto md:max-h-[calc(100vh-4rem)] ">
           <div className="w-full ">
             <div className="flex items-center justify-between">
               <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">

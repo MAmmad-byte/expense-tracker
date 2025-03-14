@@ -43,7 +43,7 @@ const AppChart = ({ stats }: Props) => {
 
   return (
     <ApexChart
-      type="line"
+      type="bar"
       options={option}
       series={series}
       height={"100%"}
