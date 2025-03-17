@@ -1,20 +1,23 @@
 "use client"
 import { doCredentialsLogin } from "@/app/actions";
+import Loader from "@/app/components/Loader";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import React, { FormEvent, useState } from "react";
 
 const Signin = () => {
-  const router = useRouter()
+  const [loader, setLoader] = useState(false)
   const [error, setError] = useState("")
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    setLoader(true)
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget)
     // console.log(formData)
     const response = await doCredentialsLogin(formData)
-    if (response.error)
+    if (response.error){
       setError(response.error)
+      setLoader(false)
+    }
     else
       window.location.href = "/"
 
@@ -62,10 +65,12 @@ const Signin = () => {
             <div className="flex items-center justify-between">
 
               <button
+              disabled={loader}
                 type="submit"
-                className="text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center "
+                className="flex items-center text-white bg-sky-700 hover:bg-sky-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-bold rounded-lg text-sm sm:w-auto px-5 py-2.5 text-center "
               >
-                Login
+                {loader && <Loader/>}
+               {loader ? "Loading...": "Login"}
               </button>
               <p className=" mx-2 k rounded-md text-xs">
               Don't have an account?

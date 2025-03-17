@@ -9,6 +9,8 @@ import axios from "axios";
 import ChartSkeleton from "./components/ChartSkeleton";
 import ExpenseDetail from "./components/ExpenseDetail";
 
+export interface StatsList{total:number, date:string}
+
 export default function Home() {
   const closeForm = () => {
     setForm(false);
@@ -17,7 +19,7 @@ export default function Home() {
   const [form, setForm] = useState(false);
   const [expenseValue, setExpenseValue] = useState<number|undefined>(undefined);
   
-  const [stats, setStats] = useState([]);
+  const [stats, setStats] = useState<StatsList[]>([]);
   const [isStat, setIsStat] = useState(false);
   const [isExpense, setIsExpense] = useState(true);
   const [expenses, setExpenses] = useState<FormData[]>([]);
@@ -34,6 +36,7 @@ export default function Home() {
   async function getMonthlyStats() {
     const expenses = await axios.get("/api/expense/filter/monthlyExpense");
     setStats(expenses.data);
+    console.log(expenses.data)
     setIsStat(true);
   }
   useEffect(() => {
@@ -50,15 +53,15 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
                 <p className="text-xs">Total Expense</p>
-                <p className="font-semibold mt-1 text-red-600">Rs 4,568/-</p>
+                <p className="font-semibold mt-1 text-red-600">Rs {stats[0]?.total}/-</p>
               </div>
               <div className="w-full mx-3 py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
-                <p className="text-xs">Most Expensive: Food & Drink</p>
-                <p className="font-semibold mt-1 text-blue-600">Rs 4,568/-</p>
+                <p className="text-xs">Last Month</p>
+                <p className="font-semibold mt-1 text-blue-600">Rs {stats[1]?.total}/-</p>
               </div>
               <div className="w-full py-4 px-6 text-gray-600 bg-white rounded-md shadow-sm">
                 <p className="text-xs">Save from last month</p>
-                <p className="font-semibold mt-1 text-green-600">Rs 4,568/-</p>
+                <p className="font-semibold mt-1 text-green-600">Rs {stats[1]?.total - stats[0]?.total}/-</p>
               </div>
             </div>
             <div className=" mt-5">
@@ -80,6 +83,7 @@ export default function Home() {
               setList={setExpenses}
               isExpense={isExpense}
               setDetail={(value)=>setExpenseValue(value)}
+              statsList = {stats}
             />
           </div>
         </div>
